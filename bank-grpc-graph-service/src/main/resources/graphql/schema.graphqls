@@ -1,0 +1,88 @@
+enum AccountType{
+    CURRENT_ACCOUNT
+    SAVING_ACCOUNT
+}
+enum AccountState{
+    CREATED
+    ACTIVATED
+    SUSPENDED
+    BLOCKED
+}
+enum TransactionType{
+    DEBIT
+    CREDIT
+}
+enum TransactionStatus{
+    PENDING
+    EXECUTED
+    REJECTED
+}
+#=======================Base Object=====================
+type BankAccount{
+    id: String
+    balance : Float!
+    createdAt : Float
+    type : AccountType!
+    status : AccountState!
+    currency: Currency!
+
+}
+
+type Currency{
+    id:String
+    name: String!
+    symbol: String!
+    price : Float!
+}
+
+type Transaction{
+    id: String
+    accountId: String!
+    timestamp:Float
+    amount : Float!
+    type: TransactionType!
+    status: TransactionStatus!
+}
+
+#==================Mutation objects========================
+input CreateAccountRequest{
+    balance: Float
+    type : AccountType!
+    state : AccountState!
+    currencySymbol: String!
+}
+input UpdateAccountRequest {
+    #accountId: String!
+    type : AccountType
+    state : AccountState
+}
+
+input ConvertCurrencyRequest{
+    currencyFrom: String
+    currencyTo:String
+    amount: Float
+}
+
+type ConvertCurrencyResponse{
+    currencyFrom: String
+    currencyTo:String
+    amount: Float
+    conversionResult: Float
+}
+
+
+#======== Callable Queries and Mutations from client=======
+type Query{
+    getAccount(accountId:String!): BankAccount
+    getListAccounts: [BankAccount]
+    getListTransactions:[Transaction]
+    #getResolvedCurrency(id:String): Currency
+
+}
+
+type Mutation{
+    createAccount(createRequest : CreateAccountRequest): BankAccount
+    updateAccount(accountId: String!, updateRequest: UpdateAccountRequest ) : BankAccount
+    convertCurrency(convertRequest: ConvertCurrencyRequest): ConvertCurrencyResponse
+}
+

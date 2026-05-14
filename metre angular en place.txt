@@ -1,0 +1,34 @@
+lors que le package manager est instller et tout, pour créer un nouveau projet angular, on fait comme suitl:
+
+1) ng new nom_projet :crée un nouveau projet
+2)ng serve : lance le serveur, il faudrait etre dans un terminal et dans le projet
+3) ng generate component components/account : crée un composant account dans un dossier nomé components dans le dossier app(c'est dans ça c'est créer par defaut, app est considéré comme racine de ton projet).
+3) ng generate service services/account : crée un service account dans le dossier nomé services dans app.
+
+---------------- Configure le Routing vers les component dans  app.routes.ts---------------------
+ dans ce fichier il ya une variable route qui est vide : Routes = [], dans cette liste on defini les routes comme suit: 
+
+
+
+mport { Routes } from '@angular/router';
+
+import { AccountComponent } from './components/account/account.component';
+import { CurrencyComponent } from './components/currency/currency.component';
+import { GrpcComponent } from './components/grpc/grpc.component';
+
+export const routes: Routes = [
+  { path: '', redirectTo: 'account', pathMatch: 'full' },
+  { path: 'account', component: AccountComponent },
+  { path: 'currency', component: CurrencyComponent },
+  { path: 'grpc', component: GrpcComponent }
+];
+
+c'est pour dire que lorsqu'on met : http://localhost:4200/account, c'est le le account.component qui est appélé(et ce component est importer comme 'AccountComponent', parce que AccountComponent est le nom exporté dans account.component, donc il faut les importer avant d'ajouter les route comme ci-haut: import { AccountComponent } from './components/account/account.component';)
+
+
+
+-----------------------On peut ainsi adapter app.component.html comme on veut(on enleve le contenu et on peu l"adapter comme une page home, notre propre code html de dans-----------attention à ne pas enlevé la dernière ligne: <router-outlet /> qui permet de gerer le routage defini dans app.routes.ts pour les different lien qui se retrouverait par exemple sur cette page de home-------------------
+
+
+------------------------------DEFINIR UN LIEN(comme lien href par exemple)------------------------------------
+<a routerLink="/account">Account</a> 

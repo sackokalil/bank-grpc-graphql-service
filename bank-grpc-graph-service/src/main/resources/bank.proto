@@ -1,0 +1,145 @@
+syntax = "proto3";
+import "google/protobuf/empty.proto";
+option java_package = "bo.ms.informatik.bankgrpcgraphservice.grpc.stub";
+
+enum AccountType{
+  CURRENT_ACCOUNT=0;
+  SAVING_ACCOUNT=1;
+}
+enum AccountState{
+  CREATED=0;
+  ACTIVATED=1;
+  SUSPENDED=2;
+  BLOCKED=3;
+}
+enum TransactionType{
+  DEBIT=0;
+  CREDIT=1;
+}
+enum TransactionStatus{
+  PENDING=0;
+  EXECUTED=1;
+  REJECTED=2;
+}
+message BankAccount{
+  string accountId=1;
+  double balance=2;
+  int64 createdAt=3;
+  AccountType  type=4;
+  AccountState state=5;
+  Currency currency=6;
+
+}
+
+message Currency{
+  string id=1;
+  string name=2;
+  string symbol=3;
+  double price=4;
+}
+
+message Transaction{
+  string id=1;
+  string accountId=2;
+  int64 timestamp=3;
+  double amount=4;
+  TransactionType type=5;
+  TransactionStatus status=6;
+
+}
+
+
+//ACCOUNT RELATED MESSAGES
+message GetAccountRequest{
+  string accountId=1;
+}
+
+message GetAccountResponse{
+  BankAccount account=1;
+}
+
+message GetListAccountRequest{}
+
+message GetListAccountResponse{
+  repeated BankAccount bankAccounts=1;
+}
+
+message CreateAccountRequest{
+  double balance=1;
+  AccountType  type=2;
+  AccountState state=3;
+  string currencySymbol=4;
+}
+
+
+//CURRENCY RELATED MESSAGES
+message AddCurrencyRequest{
+  string name=1;
+  string symbol=2;
+  double price=3;
+}
+
+message AddCurrencyResponse{
+  Currency currency=1;
+}
+
+message ConvertCurrencyRequest{
+  string currencyFrom=1;
+  string currencyTo=2;
+  double amount=3;
+}
+
+message ConvertCurrencyResponse{
+  string currencyFrom=1;
+  string currencyTo=2;
+  double amount=3;
+  double conversionResult=4;
+}
+
+message GetCurrencyRequest{
+  string currencyId=1;
+}
+
+message GetCurrencyResponse{
+  Currency currency=1;
+}
+
+message GetListCurrencyResponse{
+  repeated Currency currencies=1;
+}
+
+//TRANSACTION RELATED MESSAGES============
+message GetStreamOfTransactionsRequest{
+  string accountId=1;
+}
+
+message PerformStreamOfTransactionsResponse{
+  double totalTransactionAmount=1;
+  double totalCreditTransactionAmount=2;
+  double totalDebitTransactionAmount=3;
+  int32 totalTransactionCount=4;
+}
+
+
+//===============REMOTE CALLABLE SERVICES=============================
+
+service BankService{
+  //========Unary model Services======================
+  rpc createAccount(CreateAccountRequest) returns (BankAccount);
+  rpc getAccount(GetAccountRequest) returns (GetAccountResponse);
+  rpc getListAccounts(GetListAccountRequest) returns (GetListAccountResponse);
+
+  rpc addCurrency(AddCurrencyRequest) returns (AddCurrencyResponse);
+  rpc getCurrency(GetCurrencyRequest) returns (GetCurrencyResponse);
+  rpc getListCurrencies(google.protobuf.Empty) returns (GetListCurrencyResponse);
+  rpc convertCurrency(ConvertCurrencyRequest) returns (ConvertCurrencyResponse);
+
+  //============Server streaming model  Service================
+  rpc getStreamOfTransactions(GetStreamOfTransactionsRequest) returns (stream Transaction);
+
+  //============= Client Streaming model Service=========
+  rpc performStreamOfTransactions(stream Transaction) returns (PerformStreamOfTransactionsResponse);
+
+  //==========Bidirectional(client-server) streaming model Service=======
+  rpc executeStreamOfTransactions(stream Transaction) returns (stream Transaction);
+}
