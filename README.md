@@ -157,9 +157,9 @@ The gRPC implementation demonstrates:
 - protobuf serialization
 - generated service stubs
 - asynchronous communication
-- different communications modes are implemented
+- different communication modes are implemented
 
-Here is communication methodes of grpc : 
+Here are communication methodes of grpc : 
 ![Communication methodes](communication-methodes.png)
 
 The project uses generated protobuf Java classes and service stubs.
