@@ -160,7 +160,7 @@ The gRPC implementation demonstrates:
 - different communications modes are implemented
 
 Here is communication methodes of grpc : 
-![Communication methodes](communication-methode.png)
+![Communication methodes](communication-methodes.png)
 
 The project uses generated protobuf Java classes and service stubs.
 
