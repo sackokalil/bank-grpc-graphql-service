@@ -58,7 +58,7 @@ The architecture demonstrates how modern backend systems communicate using diffe
 
 # Architecture Diagram
 
-![Architecture Diagram](architecture.png)
+![Architecture Diagram](demo-architecture.png)
 
 ---
 
